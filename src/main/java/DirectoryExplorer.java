@@ -3,22 +3,24 @@ import java.io.File;
 
 public class DirectoryExplorer {
 
-    public void findAllFiles(File dir){
+    public void findAllFiles(File dir) {
+
         FilesCompare filesCompare = new FilesCompare();
         File[] files = dir.listFiles();
 
-        for (int i = 0; i < files.length; i++) {
-           if (files[i].isDirectory()){
-               findAllFiles(files[i]);
-           }else {
-               for (File f : files){
-                   if(filesCompare.isFilesEquals(f, files[i])){
-                       f.renameTo(new File(files[i].getName() + "_duplicated"));
-                   }else{
+        for (File file : files) {
 
-                   }
-               }
-           }
+            if (file.isDirectory()) {
+                findAllFiles(file);
+            }
+
+            for (int i = 0; i < files.length; i++) {
+                if (!file.getName().equals(files[i].getName())) {
+                    if (filesCompare.isFilesEquals(file, files[i])) {
+                        file.renameTo(new File(files[i].getAbsolutePath() + "_duplicated"));
+                    }
+                }
+            }
         }
     }
 }
